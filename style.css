@@ -1,0 +1,204 @@
+
+/* style.css - B組智慧衣櫃【質感升級版】 */
+
+:root {
+    --primary-color: #4a90e2;       /* 科技藍 */
+    --primary-hover: #357abd;
+    --secondary-color: #2c3e50;     /* 深質感灰藍 */
+    --bg-color: #f0f4f8;            /* 柔和背景色 */
+    --card-color: #ffffff;
+    --text-color: #2c3e50;
+    --success-color: #2ecc71;       /* 儲存成功綠 */
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-hover: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; background-color: var(--bg-color); color: var(--text-color); line-height: 1.6; }
+
+/* 頁首與選單優化：加入漸層與現代感 */
+.main-header { 
+    background: linear-gradient(135deg, var(--secondary-color), #34495e); 
+    color: white; 
+    padding: 1.5rem 1rem; 
+    text-align: center; 
+    position: sticky; 
+    top: 0; 
+    z-index: 100; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15); 
+}
+.main-header h1 { font-size: 1.6rem; margin-bottom: 0.8rem; letter-spacing: 1px; }
+
+/* 導覽按鈕微動態：懸浮時滑順變色 */
+.main-nav ul { list-style: none; display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; }
+.main-nav ul li a { 
+    color: #bdbdbd; 
+    text-decoration: none; 
+    padding: 0.6rem 1.2rem; 
+    border-radius: 25px; 
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+    font-size: 0.9rem; 
+    display: inline-block; 
+    font-weight: 500;
+}
+.main-nav ul li a:hover { color: white; background-color: rgba(255,255,255,0.1); }
+.main-nav ul li a.active { background-color: var(--primary-color); color: white; box-shadow: 0 2px 5px rgba(74, 144, 226, 0.4); }
+
+/* 主要內容區塊優化：圓角與平滑陰影 */
+.content-container { max-width: 1200px; margin: 2rem auto; padding: 0 1.5rem; }
+.page-section { 
+    display: none; 
+    background: var(--card-color); 
+    padding: 2.5rem; 
+    border-radius: 16px; 
+    box-shadow: var(--shadow); 
+    margin-bottom: 2rem; 
+}
+.page-section.active { display: block; animation: slideUp 0.4s ease-out; }
+
+@keyframes slideUp { 
+    from { opacity: 0; transform: translateY(20px); } 
+    to { opacity: 1; transform: translateY(0); } 
+}
+
+h2 { border-left: 6px solid var(--primary-color); padding-left: 12px; margin-bottom: 1.8rem; color: var(--secondary-color); font-size: 1.4rem; }
+
+/* RWD 雙欄網格佈局 */
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
+
+/* 首頁宣傳卡片優化：滑鼠移上去會微微浮起來 */
+.promo-card { 
+    padding: 2rem; 
+    border-radius: 12px; 
+    text-align: center; 
+    transition: transform 0.3s ease, box-shadow 0.3s ease; 
+    background: white;
+    box-shadow: var(--shadow);
+}
+.promo-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); }
+.ai-card { border-top: 4px solid var(--primary-color); }
+.chart-card { border-top: 4px solid #e6a23c; }
+.promo-icon { font-size: 3.5rem; margin-bottom: 1rem; color: var(--primary-color); }
+.chart-card .promo-icon { color: #e6a23c; }
+
+/* 表單控制項優化 */
+.form-group { margin-bottom: 1.5rem; }
+.form-group label { display: block; margin-bottom: 0.6rem; font-weight: 600; color: var(--secondary-color); font-size: 0.95rem; }
+.form-control { 
+    width: 100%; 
+    padding: 0.8rem 1rem; 
+    border: 1px solid #dcdfe6; 
+    border-radius: 8px; 
+    font-size: 1rem; 
+    transition: border-color 0.2s;
+    color: #606266;
+}
+.form-control:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 2px rgba(74,144,226,0.2); }
+
+/* 上傳框設計 */
+.upload-box { 
+    border: 2px dashed #cbd5e1; 
+    padding: 3rem 2rem; 
+    text-align: center; 
+    border-radius: 12px; 
+    cursor: pointer; 
+    background: #f8fafc; 
+    transition: all 0.3s;
+}
+.upload-box:hover { border-color: var(--primary-color); background: #f0f7ff; }
+.upload-icon { font-size: 3rem; color: #94a3b8; margin-bottom: 0.5rem; }
+.image-preview { max-width: 100%; max-height: 250px; border-radius: 8px; margin-top: 1rem; display: none; box-shadow: var(--shadow); }
+
+/* AI 狀態框 */
+.ai-status-box { background: #f0f7ff; padding: 1.2rem; border-radius: 8px; margin-top: 1.5rem; border-left: 4px solid var(--primary-color); }
+.loading-spinner { display: none; margin: 15px auto; border: 4px solid #e2e8f0; border-top: 4px solid var(--primary-color); border-radius: 50%; width: 32px; height: 32px; animation: spin 0.8s linear infinite; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+/* 按鈕美化 */
+.btn { 
+    border: none; 
+    padding: 0.8rem 1.5rem; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    font-size: 1rem; 
+    font-weight: 600;
+    width: 100%; 
+    transition: all 0.2s; 
+    color: white; 
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+.btn-primary, .btn-submit { background-color: var(--primary-color); }
+.btn-primary:hover, .btn-submit:hover { background-color: var(--primary-hover); }
+.btn-warning { background-color: #e6a23c; }
+.btn-warning:hover { background-color: #cd8725; }
+.btn-success { background-color: var(--success-color); }
+.btn-success:hover { background-color: #27ae60; }
+
+/* 衣櫃卡片網格與卡片精緻化 */
+.filter-buttons { display: flex; gap: 10px; margin-bottom: 2rem; flex-wrap: wrap; }
+.filter-btn { 
+    background: #e2e8f0; 
+    border: none; 
+    padding: 0.6rem 1.2rem; 
+    border-radius: 20px; 
+    cursor: pointer; 
+    font-weight: 500;
+    color: #475569;
+    transition: all 0.2s;
+}
+.filter-btn.active, .filter-btn:hover { background: var(--secondary-color); color: white; }
+
+.wardrobe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.8rem; }
+.clothes-card { 
+    background: #fff; 
+    border: 1px solid #e2e8f0; 
+    border-radius: 12px; 
+    overflow: hidden; 
+    box-shadow: var(--shadow); 
+    text-align: center; 
+    padding-bottom: 1.2rem; 
+    position: relative; 
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.clothes-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); }
+.clothes-card img { width: 100%; height: 200px; object-fit: cover; }
+.clothes-card h4 { margin: 0.8rem 0 0.3rem; color: var(--secondary-color); font-size: 1.05rem; }
+.clothes-card p { font-size: 0.85rem; color: #64748b; }
+
+/* 刪除按鈕 */
+.delete-btn { 
+    position: absolute; 
+    top: 8px; 
+    right: 8px; 
+    background: rgba(239, 68, 68, 0.9); 
+    color: white; 
+    border: none; 
+    border-radius: 50%; 
+    width: 28px; 
+    height: 28px; 
+    cursor: pointer; 
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+.delete-btn:hover { background: rgba(220, 38, 38, 1); }
+
+/* 表格優化 */
+.table-responsive { overflow-x: auto; border-radius: 8px; box-shadow: var(--shadow); }
+.history-table { width: 100%; border-collapse: collapse; background: white; text-align: left; }
+.history-table th, .history-table td { padding: 1rem; border-bottom: 1px solid #e2e8f0; }
+.history-table th { background-color: #f8fafc; color: #475569; font-weight: 600; }
+.history-table tr:last-child td { border-bottom: none; }
+
+/* 圖表外框 */
+.chart-box { background: #f8fafc; padding: 1.5rem; border-radius: 12px; border: 1px solid #e2e8f0; }
+.chart-title { text-align: center; margin-bottom: 1.2rem; font-size: 1.05rem; color: var(--secondary-color); font-weight: 600; }
+.chart-wrapper { width: 100%; max-width: 320px; margin: 0 auto; }
+
+/* 頁尾 */
+.main-footer { background: var(--secondary-color); color: #94a3b8; text-align: center; padding: 2rem 1rem; font-size: 0.85rem; margin-top: 4rem; border-top: 3px solid var(--primary-color); }
