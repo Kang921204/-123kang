@@ -3,162 +3,415 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 智慧衣櫃與穿搭數據分析系統</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>AI智慧衣櫃與穿搭數據分析系統 - B組專題</title>
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="#" class="navbar-brand">
-                <i class="fa-solid fa-wand-magic-sparkles"></i> AI 智慧衣櫃系統
-            </a>
-            <span class="team-badge">B組 專題成果</span>
-        </div>
-    </nav>
+    <header class="main-header">
+        <h1>AI智慧衣櫃與穿搭數據分析系統</h1>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="#" class="nav-link active" data-target="home-section"><i class="fa-solid fa-house"></i> 首頁</a></li>
+                <li><a href="#" class="nav-link" data-target="add-section"><i class="fa-solid fa-circle-plus"></i> 新增衣物</a></li>
+                <li><a href="#" class="nav-link" data-target="wardrobe-section"><i class="fa-solid fa-shirt"></i> 我的衣櫃</a></li>
+                <li><a href="#" class="nav-link" data-target="record-section"><i class="fa-solid fa-calendar-days"></i> 穿搭紀錄</a></li>
+                <li><a href="#" class="nav-link" data-target="analysis-section"><i class="fa-solid fa-chart-pie"></i> 數據分析</a></li>
+            </ul>
+        </nav>
+    </header>
 
-    <div class="main-container">
+    <main class="content-container">
         
-        <section class="dashboard-card weather-section">
-            <div class="weather-header">
-                <div class="weather-info">
-                    <i class="fa-solid fa-cloud-sun weather-icon"></i>
-                    <div>
-                        <h2>今日天氣與穿搭推薦</h2>
-                        <p class="location-text"><i class="fa-solid fa-location-dot"></i> 即時定位：中部地區</p>
-                    </div>
+        <section id="home-section" class="page-section active">
+            <h2>歡迎使用 AI 智慧衣櫃系統</h2>
+            <p class="section-intro">本系統由 <strong>B組團隊</strong> 開發，結合 AI 圖像分類技術與穿搭統計分析，幫助您科學管理衣物並掌握穿搭習慣。</p>
+            <div class="grid-2">
+                <div class="promo-card ai-card">
+                    <i class="fa-solid fa-wand-magic-sparkles promo-icon"></i>
+                    <h3>AI 智慧上傳</h3>
+                    <p>利用 Teachable Machine 自動辨識衣服種類與色彩偏好。</p>
+                    <button class="btn btn-primary" onclick="switchPage('add-section')">立即體驗</button>
                 </div>
-                <div class="temp-display">26°C</div>
-            </div>
-            <div class="recommendation-box">
-                <p class="recommendation-tag">AI 穿搭建議</p>
-                <p class="recommendation-text">
-                    今日氣溫舒適微風，推薦穿著<span class="highlight">「科技藍吸濕排汗短 T」</span>搭配<span class="highlight">「高彈性休閒九分褲」</span>。
-                    早晚溫差較大，建議隨身攜帶一件薄防風外套以備不時之需。
-                </p>
+                <div class="promo-card chart-card">
+                    <i class="fa-solid fa-chart-line promo-icon"></i>
+                    <h3>穿搭數據分析</h3>
+                    <p>統計分析您的穿搭頻率與色彩分佈，洞察時尚風格。</p>
+                    <button class="btn btn-warning" onclick="switchPage('analysis-section')">查看圖表</button>
+                </div>
             </div>
         </section>
 
-        <section class="metrics-grid">
-            <div class="dashboard-card chart-container">
-                <h3><i class="fa-solid fa-chart-pie"></i> 衣物分類分佈圖</h3>
-                <div class="chart-wrapper">
-                    <canvas id="categoryChart"></canvas>
+        <section id="add-section" class="page-section">
+            <h2><i class="fa-solid fa-circle-plus"></i> 新增衣物資料</h2>
+            <form id="clothes-form">
+                <div class="form-group">
+                    <label>上傳衣物照片</label>
+                    <div class="upload-box" onclick="document.getElementById('file-input').click()">
+                        <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+                        <p class="upload-text">點擊此處上傳衣服照片</p>
+                        <input type="file" id="file-input" accept="image/*" style="display: none;" required>
+                        <img id="preview-img" alt="衣物預覽" class="image-preview">
+                    </div>
                 </div>
-            </div>
+
+                <div class="ai-status-box">
+                    <p class="ai-title"><strong><i class="fa-solid fa-robot"></i> Teachable Machine AI 辨識核心：</strong></p>
+                    <div class="loading-spinner" id="ai-loading"></div>
+                    <p id="ai-output" class="ai-text">等待您上傳照片進行即時 AI 分類...</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="clothes-name">衣物名稱</label>
+                    <input type="text" id="clothes-name" class="form-control" placeholder="例如：百搭落肩純棉白T" required>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="clothes-type">衣服類別</label>
+                        <select id="clothes-type" class="form-control">
+                            <option value="上衣">上衣 (Top)</option>
+                            <option value="下身">下身 (Bottom)</option>
+                            <option value="外套">外套 (Coat)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="clothes-color">主要顏色</label>
+                        <select id="clothes-color" class="form-control">
+                            <option value="白色">白色</option>
+                            <option value="黑色">黑色</option>
+                            <option value="藍色">藍色</option>
+                            <option value="灰色">灰色</option>
+                            <option value="其他">其他</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-submit"><i class="fa-solid fa-floppy-disk"></i> 儲存至虛擬衣櫃</button>
+            </form>
+        </section>
+
+        <section id="wardrobe-section" class="page-section">
+            <h2><i class="fa-solid fa-shirt"></i> 我的智慧衣櫃</h2>
             
-            <div class="dashboard-card chart-container">
-                <h3><i class="fa-solid fa-chart-column"></i> 本週穿搭頻率統計</h3>
-                <div class="chart-wrapper">
-                    <canvas id="frequencyChart"></canvas>
+            <div class="filter-buttons">
+                <button type="button" class="filter-btn active" data-filter="all">全部 (<span id="count-all">0</span>)</button>
+                <button type="button" class="filter-btn" data-filter="上衣">上衣 (<span id="count-top">0</span>)</button>
+                <button type="button" class="filter-btn" data-filter="下身">下身 (<span id="count-bottom">0</span>)</button>
+                <button type="button" class="filter-btn" data-filter="外套">外套 (<span id="count-coat">0</span>)</button>
+            </div>
+
+            <div class="wardrobe-grid" id="wardrobe-container">
+                </div>
+        </section>
+
+        <section id="record-section" class="page-section">
+            <div class="grid-2">
+                <div class="record-form-container">
+                    <h2><i class="fa-solid fa-calendar-plus"></i> 記錄今日穿搭</h2>
+                    <form id="record-form">
+                        <div class="form-group">
+                            <label for="record-date">選擇穿搭日期</label>
+                            <input type="date" id="record-date" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="select-top">挑選上衣</label>
+                            <select id="select-top" class="form-control"><option value="">--請選擇--</option></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="select-bottom">挑選下身</label>
+                            <select id="select-bottom" class="form-control"><option value="">--請選擇--</option></select>
+                        </div>
+                        <button type="submit" class="btn btn-success"><i class="fa-solid fa-check"></i> 儲存穿搭紀錄</button>
+                    </form>
+                </div>
+
+                <div class="record-history-container">
+                    <h2><i class="fa-solid fa-clock-rotate-left"></i> 歷史穿搭日誌</h2>
+                    <div class="table-responsive">
+                        <table class="history-table">
+                            <thead>
+                                <tr>
+                                    <th>日期</th>
+                                    <th>上衣內容</th>
+                                    <th>下身內容</th>
+                                </tr>
+                            </thead>
+                            <tbody id="history-table-body">
+                                </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section class="wardrobe-section">
-            <div class="section-title">
-                <h3><i class="fa-solid fa-shirt"></i> 智慧衣櫃當季單品</h3>
-                <p>點選單品可檢視詳細材質數據與 AI 建議洗滌方式</p>
-            </div>
+        <section id="analysis-section" class="page-section">
+            <h2><i class="fa-solid fa-chart-pie"></i> 穿搭大數據統計分析</h2>
+            <p class="section-intro">系統自動統計衣櫃內的所有資料，並即時運算出圖表：</p>
             
-            <div class="clothing-grid">
-                <div class="clothing-card">
-                    <div class="card-img-placeholder">
-                        <i class="fa-solid fa-shirt inner-icon"></i>
-                    </div>
-                    <div class="card-content">
-                        <span class="category-tag">上衣 / T-Shirt</span>
-                        <h4>科技藍吸濕排汗短 T</h4>
-                        <p class="status-text"><span class="dot clean"></span> 狀態：已洗滌 (乾淨)</p>
+            <div class="grid-2">
+                <div class="chart-box">
+                    <h3 class="chart-title">衣物顏色比例分佈</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="colorPieChart"></canvas>
                     </div>
                 </div>
-
-                <div class="clothing-card">
-                    <div class="card-img-placeholder">
-                        <i class="fa-solid fa-person-pants inner-icon"></i>
-                    </div>
-                    <div class="card-content">
-                        <span class="category-tag">褲裝 / 休閒</span>
-                        <h4>高彈性休閒九分褲</h4>
-                        <p class="status-text"><span class="dot clean"></span> 狀態：已洗滌 (乾淨)</p>
-                    </div>
-                </div>
-
-                <div class="clothing-card">
-                    <div class="card-img-placeholder">
-                        <i class="fa-solid fa-user-ninja inner-icon"></i>
-                    </div>
-                    <div class="card-content">
-                        <span class="category-tag">外衣 / 防風</span>
-                        <h4>機能型極輕量防風外套</h4>
-                        <p class="status-text"><span class="dot dirty"></span> 狀態：待洗滌</p>
+                <div class="chart-box">
+                    <h3 class="chart-title">服飾類別件數統計</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="typeBarChart"></canvas>
                     </div>
                 </div>
             </div>
         </section>
+    </main>
 
-    </div>
+    <footer class="main-footer">
+        <p><i class="fa-solid fa-code"></i> 靜宜大學 資工系專題 - B組「AI智慧衣櫃與穿搭數據分析系統」</p>
+    </footer>
 
     <script>
-        // 圓餅圖：衣物分類
-        const ctxPie = document.getElementById('categoryChart').getContext('2d');
-        new Chart(ctxPie, {
-            type: 'pie',
-            data: {
-                labels: ['上衣類', '褲裝類', '外套類', '配件類'],
-                datasets: [{
-                    data: [40, 30, 20, 10],
-                    backgroundColor: [
-                        'rgba(56, 189, 248, 0.7)',  /* 螢光藍 */
-                        'rgba(124, 77, 255, 0.7)',  /* 魅惑紫 */
-                        'rgba(34, 211, 238, 0.7)',  /* 靛青 */
-                        'rgba(148, 163, 184, 0.7)'  /* 科技灰 */
-                    ],
-                    borderColor: 'rgba(255, 255, 255, 0.1)',
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { labels: { color: '#94a3b8', font: { family: 'Noto Sans TC' } } }
-                },
-                animation: { duration: 1500, easing: 'easeOutQuart' }
+        // 預設衣櫃資料（若 LocalStorage 為空則載入這些預設衣服）
+        let clothesData = JSON.parse(localStorage.getItem('b_team_clothes')) || [
+            { id: 1, name: "百搭白T", type: "上衣", color: "白色", img: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=300" },
+            { id: 2, name: "工作黑寬褲", type: "下身", color: "黑色", img: "https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=300" },
+            { id: 3, name: "丹寧牛仔褲", type: "下身", color: "藍色", img: "https://images.unsplash.com/photo-1542272604-787c3835535d?w=300" },
+            { id: 4, name: "防風丹寧外套", type: "外套", color: "藍色", img: "https://images.unsplash.com/photo-1611312449412-6cefac5dc3e4?w=300" }
+        ];
+
+        let historyData = JSON.parse(localStorage.getItem('b_team_history')) || [
+            { date: "2026-05-28", top: "百搭白T", bottom: "丹寧牛仔褲" },
+            { date: "2026-05-29", top: "百搭白T", bottom: "工作黑寬褲" }
+        ];
+
+        let colorChart, typeChart;
+        document.getElementById('record-date').value = new Date().toISOString().split('T')[0];
+
+        // 頁面選單切換效果
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('.page-section');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                switchPage(this.getAttribute('data-target'));
+            });
+        });
+
+        function switchPage(targetId) {
+            sections.forEach(sec => sec.classList.remove('active'));
+            navLinks.forEach(link => link.classList.remove('active'));
+
+            document.getElementById(targetId).classList.add('active');
+            const activeLink = document.querySelector(`[data-target="${targetId}"]`);
+            if(activeLink) activeLink.classList.add('active');
+
+            if (targetId === 'wardrobe-section') renderWardrobe('all');
+            if (targetId === 'record-section') updateRecordDropdowns();
+            if (targetId === 'analysis-section') updateCharts();
+        }
+
+        // 模擬 Teachable Machine 圖片辨識
+        const fileInput = document.getElementById('file-input');
+        const previewImg = document.getElementById('preview-img');
+        const aiLoading = document.getElementById('ai-loading');
+        const aiOutput = document.getElementById('ai-output');
+
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    previewImg.src = event.target.result;
+                    previewImg.style.display = 'block';
+                    
+                    aiOutput.innerText = "Teachable Machine 模型正在分析圖像...";
+                    aiLoading.style.display = 'block';
+
+                    setTimeout(() => {
+                        aiLoading.style.display = 'none';
+                        const mockConf = (Math.random() * 15 + 85).toFixed(1); 
+                        let guessedType = "上衣", guessedColor = "白色";
+                        
+                        if(file.name.includes('pants') || file.name.includes('褲')) guessedType = "下身";
+                        if(file.name.includes('coat') || file.name.includes('外套')) guessedType = "外套";
+                        if(file.name.includes('black') || file.name.includes('黑')) guessedColor = "黑色";
+                        if(file.name.includes('blue') || file.name.includes('藍')) guessedColor = "藍色";
+
+                        aiOutput.innerHTML = `<span style="color: #2ecc71; font-weight:bold;"><i class="fa-solid fa-circle-check"></i> 辨識成功！</span><br>預測分類結果：<strong>${guessedType}</strong> (${mockConf}%)<br>偵測主色系：<strong>${guessedColor}</strong>`;
+                        document.getElementById('clothes-type').value = guessedType;
+                        document.getElementById('clothes-color').value = guessedColor;
+                    }, 1200);
+                };
+                reader.readAsDataURL(file);
             }
         });
 
-        // 長條圖：穿搭頻率
-        const ctxBar = document.getElementById('frequencyChart').getContext('2d');
-        new Chart(ctxBar, {
-            type: 'bar',
-            data: {
-                labels: ['週一', '週二', '週三', '週四', '週五', '週六', '週日'],
-                datasets: [{
-                    label: '穿搭出門次數',
-                    data: [2, 1, 3, 2, 4, 1, 2],
-                    backgroundColor: 'rgba(56, 189, 248, 0.5)',
-                    borderColor: '#38bdf8',
-                    borderWidth: 2,
-                    borderRadius: 6
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { labels: { color: '#94a3b8', font: { family: 'Noto Sans TC' } } }
-                },
-                scales: {
-                    x: { grid: { display: false }, ticks: { color: '#94a3b8' } },
-                    y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8', stepSize: 1 } }
-                },
-                animation: { duration: 1800, easing: 'easeOutQuart' }
-            }
+        // 儲存衣物到 LocalStorage
+        document.getElementById('clothes-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const newItem = {
+                id: Date.now(),
+                name: document.getElementById('clothes-name').value,
+                type: document.getElementById('clothes-type').value,
+                color: document.getElementById('clothes-color').value,
+                img: previewImg.src || "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=300"
+            };
+            clothesData.push(newItem);
+            localStorage.setItem('b_team_clothes', JSON.stringify(clothesData));
+            alert('成功加入衣櫃！');
+            this.reset();
+            previewImg.style.display = 'none';
+            aiOutput.innerText = "等待您上傳照片進行即時 AI 分類...";
+            switchPage('wardrobe-section');
         });
+
+        // 渲染衣櫃衣服卡片
+        function renderWardrobe(filterType = 'all') {
+            const container = document.getElementById('wardrobe-container');
+            container.innerHTML = '';
+            const counts = { all: 0, '上衣': 0, '下身': 0, '外套': 0 };
+            
+            clothesData.forEach(item => {
+                counts.all++;
+                if (counts[item.type] !== undefined) counts[item.type]++;
+            });
+
+            document.getElementById('count-all').innerText = counts.all;
+            document.getElementById('count-top').innerText = counts['上衣'];
+            document.getElementById('count-bottom').innerText = counts['下身'];
+            document.getElementById('count-coat').innerText = counts['外套'];
+
+            const filteredData = filterType === 'all' ? clothesData : clothesData.filter(i => i.type === filterType);
+            if(filteredData.length === 0) {
+                container.innerHTML = `<p class="empty-tip">此分類目前沒有衣服，快去新增吧！</p>`;
+                return;
+            }
+
+            filteredData.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'clothes-card';
+                card.innerHTML = `
+                    <button type="button" class="delete-btn" onclick="deleteClothes(${item.id})">×</button>
+                    <img src="${item.img}" alt="clothes">
+                    <h4>${item.name}</h4>
+                    <p>${item.type} | ${item.color}</p>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        window.deleteClothes = function(id) {
+            if(confirm('確定要移除這件衣服嗎？')) {
+                clothesData = clothesData.filter(i => i.id !== id);
+                localStorage.setItem('b_team_clothes', JSON.stringify(clothesData));
+                renderWardrobe(document.querySelector('.filter-btn.active').getAttribute('data-filter'));
+            }
+        };
+
+        // 綁定篩選按鈕事件
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                renderWardrobe(this.getAttribute('data-filter'));
+            });
+        });
+
+        // 更新穿搭下拉選單
+        function updateRecordDropdowns() {
+            const topSelect = document.getElementById('select-top');
+            const bottomSelect = document.getElementById('select-bottom');
+            topSelect.innerHTML = '<option value="">--請選擇上衣--</option>';
+            bottomSelect.innerHTML = '<option value="">--請選擇下身--</option>';
+
+            clothesData.forEach(item => {
+                const opt = `<option value="${item.name}">${item.name} (${item.color})</option>`;
+                if (item.type === '上衣') topSelect.innerHTML += opt;
+                if (item.type === '下身') bottomSelect.innerHTML += opt;
+            });
+        }
+
+        // 儲存穿搭紀錄
+        document.getElementById('record-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const date = document.getElementById('record-date').value;
+            const top = document.getElementById('select-top').value;
+            const bottom = document.getElementById('select-bottom').value;
+
+            if(!top || !bottom) { alert('請完整選擇上衣與下身衣服！'); return; }
+
+            historyData.unshift({ date, top, bottom });
+            localStorage.setItem('b_team_history', JSON.stringify(historyData));
+            alert('穿搭紀錄已儲存！');
+            renderHistoryTable();
+            this.reset();
+            document.getElementById('record-date').value = new Date().toISOString().split('T')[0];
+        });
+
+        function renderHistoryTable() {
+            const tbody = document.getElementById('history-table-body');
+            tbody.innerHTML = '';
+            if(historyData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#999;">暫無穿搭歷史紀錄</td></tr>`;
+                return;
+            }
+            historyData.forEach(item => {
+                tbody.innerHTML += `<tr><td>${item.date}</td><td>${item.top}</td><td>${item.bottom}</td></tr>`;
+            });
+        }
+
+        // 動態圖表計算與渲染 (Chart.js)
+        function updateCharts() {
+            const colorCounts = { '白色': 0, '黑色': 0, '藍色': 0, '灰色': 0, '其他': 0 };
+            const typeCounts = { '上衣': 0, '下身': 0, '外套': 0 };
+
+            clothesData.forEach(item => {
+                if(colorCounts[item.color] !== undefined) colorCounts[item.color]++;
+                else colorCounts['其他']++;
+                if(typeCounts[item.type] !== undefined) typeCounts[item.type]++;
+            });
+
+            const ctxColor = document.getElementById('colorPieChart').getContext('2d');
+            if (colorChart) colorChart.destroy();
+            colorChart = new Chart(ctxColor, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(colorCounts),
+                    datasets: [{
+                        data: Object.values(colorCounts),
+                        backgroundColor: ['#ffffff', '#2c3e50', '#3498db', '#95a5a6', '#e74c3c'],
+                        borderColor: '#bdc3c7',
+                        borderWidth: 1
+                    }]
+                },
+                options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+            });
+
+            const ctxType = document.getElementById('typeBarChart').getContext('2d');
+            if (typeChart) typeChart.destroy();
+            typeChart = new Chart(ctxType, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(typeCounts),
+                    datasets: [{
+                        label: '擁有件數',
+                        data: Object.values(typeCounts),
+                        backgroundColor: ['#4a90e2', '#2ecc71', '#f1c40f'],
+                        borderRadius: 4
+                    }]
+                },
+                options: { responsive: true, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }, plugins: { legend: { display: false } } }
+            });
+        }
+
+        // 初始化第一次執行
+        renderWardrobe('all');
+        renderHistoryTable();
     </script>
 </body>
 </html>
